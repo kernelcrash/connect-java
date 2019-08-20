@@ -45,6 +45,9 @@ class RdsSnapshotAndRestoreMojo extends BaseSnapshotMojo {
 	boolean skipSanitize = false
 	@Parameter(property = "rds-restore.skip-dump")
 	boolean skipDump = false
+	@Parameter(property = "rds-restore.skip-copy")
+	boolean skipCopy = true
+
 	// this one deletes the snapshot that was just made
 	@Parameter(property = "rds-restore.clean-sanitize")
 	boolean cleanSanitize = false
@@ -182,6 +185,10 @@ class RdsSnapshotAndRestoreMojo extends BaseSnapshotMojo {
 					dumpSchema(schema, command, dFolder)
 				})
 			}
+		}
+
+		if (!skipCopy) {
+
 		}
 
 		if (cleanSnapshot) {
