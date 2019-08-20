@@ -24,6 +24,9 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 	String snapshotCopyDestinationName
 	@Parameter(property = "rds-dbsnapshot.snapshotCopyDestinationRegion")
 	String snapshotCopyDestinationRegion
+	@Parameter(property = "rds-clone.aws-profile")
+	String awsProfile
+
 
 	@Parameter(property = "rds-dbsnapshot.skip-rds") // this makes no sense as a property, but we can't is it in an execution if we don't have this
 	boolean skip
@@ -41,4 +44,27 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 
 		getLog().info("Copy DB Snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} : ${snapshotCopyDestinationName}")
 	}
+
+        protected void copySnapshot() throws MojoFailureException {
+
+                if (snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
+                        //rdsClient.setRegion(Region.getRegion(snapshotCopyDestinationRegion));
+
+                        //CopyDBSnapshotRequest copySnapshot = new CopyDBSnapshotRequest();
+                        //copySnapshot.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
+                        //copySnapshot.setTargetDBSnapshotIdentifier(snapshotCopyDestinationName);
+
+                        //DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshot);
+                        getLog().info("Copying snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} ${snapshotCopyDestinationName}")
+
+                } else {
+                        String err = "One of snapshotCopySourceName, snapshotCopyDestinationName or snapshotCopyDestinationRegion is missing";
+                        getLog().error(err)
+                        throw new MojoFailureException(err)
+                }
+
+
+        }
+
+
 }

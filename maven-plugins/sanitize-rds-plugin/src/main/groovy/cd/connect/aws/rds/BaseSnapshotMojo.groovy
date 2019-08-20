@@ -27,14 +27,6 @@ abstract public class BaseSnapshotMojo extends AbstractMojo {
 	@Parameter(property = "rds-clone.snapshotName")
 	String snapshotName
 
-	@Parameter(property = "rds-clone.snapshotCopySourceName")
-	String snapshotCopySourceName
-	@Parameter(property = "rds-clone.snapshotCopyDestinationName")
-	String snapshotCopyDestinationName
-	@Parameter(property = "rds-clone.snapshotCopyDestinationRegion")
-	String snapshotCopyDestinationRegion
-
-
 	@Parameter(property = "rds-clone.aws-profile")
 	String awsProfile
 	@Parameter(property = 'rds-clone.db-subnet-group-name')
@@ -99,26 +91,6 @@ abstract public class BaseSnapshotMojo extends AbstractMojo {
 			restoreWaitInMinutes, pollTimeInSeconds, securityGroupNames, tags, password, multiAZ, createInstanceResult)
 	}
 
-	protected void copySnapshot() throws MojoFailureException {
-
-		if (snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
-			//rdsClient.setRegion(Region.getRegion(snapshotCopyDestinationRegion));
-
-			//CopyDBSnapshotRequest copySnapshot = new CopyDBSnapshotRequest();
-			//copySnapshot.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
-			//copySnapshot.setTargetDBSnapshotIdentifier(snapshotCopyDestinationName);
-
-			//DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshot);
-			getLog().info("Copying snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} ${snapshotCopyDestinationName}")
-
-		} else {
-			String err = "One of snapshotCopySourceName, snapshotCopyDestinationName or snapshotCopyDestinationRegion is missing";
-			getLog().error(err)
-			throw new MojoFailureException(err)
-		}
-
-
-        }
 
 }
 
