@@ -6,7 +6,6 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.rds.AmazonRDS
 import com.amazonaws.services.rds.AmazonRDSClientBuilder
 import com.amazonaws.services.rds.model.*
-import com.amazonaws.regions.*
 
 import groovy.transform.CompileStatic
 import org.apache.maven.plugin.AbstractMojo
@@ -63,30 +62,13 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 		}
 
 		if (snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
-			copySnapshot();
+			rdsClone.copySnapshot(snapshotCopySourceName, snapshotCopyDestinationRegion, snapshotCopyDestinationName)
 		} else {
                         String err = "One of snapshotCopySourceName, snapshotCopyDestinationName or snapshotCopyDestinationRegion is missing";
                         getLog().error(err)
                         throw new MojoFailureException(err)
 		}
 	}
-
-        protected void copySnapshot() throws MojoFailureException {
-
-		getLog().info("Copy DB Snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} : ${snapshotCopyDestinationName}")
-		rdsClient.setRegion(Region.getRegion(Regions.fromName(snapshotCopyDestinationRegion)));
-		getLog().info("After setRegion")
-
-		CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
-		getLog().info("After instantiate CopyDBSnapshotRequest")
-		copySnapshotReq.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
-		copySnapshotReq.setTargetDBSnapshotIdentifier(snapshotCopyDestinationName);
-
-		//DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
-		getLog().info("Copying snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} ${snapshotCopyDestinationName}")
-
-
-        }
 
 
 }

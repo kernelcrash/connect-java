@@ -6,6 +6,8 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.rds.AmazonRDS
 import com.amazonaws.services.rds.AmazonRDSClientBuilder
 import com.amazonaws.services.rds.model.*
+import com.amazonaws.regions.*
+
 import groovy.transform.CompileStatic
 import org.apache.maven.plugin.MojoFailureException
 
@@ -248,5 +250,20 @@ class RdsClone {
 		  .withSkipFinalSnapshot(true)
 		rdsClient.deleteDBInstance(del)
 	}
+
+        void copySnapshot(String sourceName, String destinationRegion, String destinationName) {
+
+                println "Copy DB Snapshot from ${sourceName} to ${destinationRegion} : ${destinationName}"
+                rdsClient.setRegion(Region.getRegion(Regions.fromName(destinationRegion)));
+                println "After setRegion"
+
+                CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
+                copySnapshotReq.setSourceDBSnapshotIdentifier(sourceName);
+                copySnapshotReq.setTargetDBSnapshotIdentifier(destinationName);
+
+                //DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
+                println "Copying snapshot from ${sourceName} to ${destinationRegion} ${destinationName}"
+
+        }
 
 }
