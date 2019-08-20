@@ -1,5 +1,13 @@
 package cd.connect.aws.rds
 
+import com.amazonaws.auth.AWSCredentialsProviderChain
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+import com.amazonaws.services.rds.AmazonRDS
+import com.amazonaws.services.rds.AmazonRDSClientBuilder
+import com.amazonaws.services.rds.model.*
+import com.amazonaws.regions.*
+
 import groovy.transform.CompileStatic
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
@@ -32,6 +40,8 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 	boolean skip
 
 	protected RdsClone rdsClone;
+        AmazonRDS rdsClient;
+
 
 	@Override
 	void execute() throws MojoExecutionException, MojoFailureException {
@@ -54,7 +64,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
         protected void copySnapshot() throws MojoFailureException {
 
 		getLog().info("Copy DB Snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} : ${snapshotCopyDestinationName}")
-		rdsClient.setRegion(Region.getRegion(snapshotCopyDestinationRegion));
+		rdsClient.setRegion(Region.getRegion(Regions.fromName(snapshotCopyDestinationRegion)));
 
 		CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
 		copySnapshotReq.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
