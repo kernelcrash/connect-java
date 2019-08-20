@@ -75,8 +75,10 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 
 		getLog().info("Copy DB Snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} : ${snapshotCopyDestinationName}")
 		rdsClient.setRegion(Region.getRegion(Regions.fromName(snapshotCopyDestinationRegion)));
+		getLog().info("After setRegion")
 
 		CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
+		getLog().info("After instantiate CopyDBSnapshotRequest")
 		copySnapshotReq.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
 		copySnapshotReq.setTargetDBSnapshotIdentifier(snapshotCopyDestinationName);
 
