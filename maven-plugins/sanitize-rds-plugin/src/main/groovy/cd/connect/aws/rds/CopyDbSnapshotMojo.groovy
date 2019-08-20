@@ -52,6 +52,16 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 		rdsClone = new RdsClone()
 		rdsClone.initialize(awsProfile)
 
+		if (snapshotCopySourceName) {
+			getLog().info("snapshotCopySourceName = ${snapshotCopySourceName}")
+		}
+		if (snapshotCopyDestinationName) {
+			getLog().info("snapshotCopyDestinationName = ${snapshotCopyDestinationName}")
+		}
+		if (snapshotCopyDestinationRegion) {
+			getLog().info("snapshotCopyDestinationRegion = ${snapshotCopyDestinationRegion}")
+		}
+
 		if (snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
 			copySnapshot();
 		} else {
