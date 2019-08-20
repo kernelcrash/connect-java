@@ -274,7 +274,7 @@ class RdsClone {
                 copySnapshotReq.setSourceDBSnapshotIdentifier(sourceName);
                 copySnapshotReq.setTargetDBSnapshotIdentifier(destinationName);
 
-                //DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
+                DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
                 println "Copying snapshot from ${sourceName} to ${destinationName}"
 
         }
