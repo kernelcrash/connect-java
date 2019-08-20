@@ -28,6 +28,20 @@ class RdsClone {
 		rdsClient = AmazonRDSClientBuilder.standard().withCredentials(chain).build()
 	}
 
+	void initializeWithRegion(String profile = null, String region) {
+		AWSCredentialsProviderChain chain = new DefaultAWSCredentialsProviderChain()
+
+		if (profile != null) {
+			chain = new AWSCredentialsProviderChain(Arrays.asList(new ProfileCredentialsProvider(profile)))
+		}
+
+		rdsClient = AmazonRDSClientBuilder.standard()
+			.withCredentials(chain)
+			.withRegion(region)
+			.build()
+	}
+
+
 	String snapshotDatabase(String database, int waitPeriodInMinutes, int waitPeriodPollTimeInSeconds, String snapshotOverride) {
 		String snapshotName = snapshotOverride ?: database + "-" + System.currentTimeMillis()
 		long start = System.currentTimeMillis()
@@ -251,18 +265,17 @@ class RdsClone {
 		rdsClient.deleteDBInstance(del)
 	}
 
-        void copySnapshot(String sourceName, String destinationRegion, String destinationName) {
+        void copySnapshot(String sourceName, String destinationName) {
 
-                println "Copy DB Snapshot from ${sourceName} to ${destinationRegion} : ${destinationName}"
-                rdsClient.setRegion(Region.getRegion(Regions.fromName(destinationRegion)));
-                println "After setRegion"
+                println "Copy DB Snapshot from ${sourceName} to ${destinationName}"
+                //rdsClient.setRegion(Region.getRegion(Regions.fromName(destinationRegion)));
 
                 CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
                 copySnapshotReq.setSourceDBSnapshotIdentifier(sourceName);
                 copySnapshotReq.setTargetDBSnapshotIdentifier(destinationName);
 
                 //DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
-                println "Copying snapshot from ${sourceName} to ${destinationRegion} ${destinationName}"
+                println "Copying snapshot from ${sourceName} to ${destinationName}"
 
         }
 

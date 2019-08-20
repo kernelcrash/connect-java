@@ -48,8 +48,6 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			return
 		}
 
-		rdsClone = new RdsClone()
-		rdsClone.initialize(awsProfile)
 
 		if (snapshotCopySourceName) {
 			getLog().info("snapshotCopySourceName = ${snapshotCopySourceName}")
@@ -61,8 +59,12 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			getLog().info("snapshotCopyDestinationRegion = ${snapshotCopyDestinationRegion}")
 		}
 
+
 		if (snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
-			rdsClone.copySnapshot(snapshotCopySourceName, snapshotCopyDestinationRegion, snapshotCopyDestinationName)
+			rdsClone = new RdsClone()
+			rdsClone.initializeWithRegion(awsProfile,snapshotCopyDestinationRegion)
+
+			rdsClone.copySnapshot(snapshotCopySourceName, snapshotCopyDestinationName)
 		} else {
                         String err = "One of snapshotCopySourceName, snapshotCopyDestinationName or snapshotCopyDestinationRegion is missing";
                         getLog().error(err)
