@@ -54,20 +54,14 @@ class CopyDbSnapshotMojo extends AbstractMojo {
         protected void copySnapshot() throws MojoFailureException {
 
 		getLog().info("Copy DB Snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} : ${snapshotCopyDestinationName}")
-			rdsClient.setRegion(Region.getRegion(snapshotCopyDestinationRegion));
+		rdsClient.setRegion(Region.getRegion(snapshotCopyDestinationRegion));
 
-			CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
-			copySnapshotReq.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
-			copySnapshotReq.setTargetDBSnapshotIdentifier(snapshotCopyDestinationName);
+		CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
+		copySnapshotReq.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
+		copySnapshotReq.setTargetDBSnapshotIdentifier(snapshotCopyDestinationName);
 
-                        //DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
-                        getLog().info("Copying snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} ${snapshotCopyDestinationName}")
-
-                } else {
-                        String err = "One of snapshotCopySourceName, snapshotCopyDestinationName or snapshotCopyDestinationRegion is missing";
-                        getLog().error(err)
-                        throw new MojoFailureException(err)
-                }
+		//DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
+		getLog().info("Copying snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} ${snapshotCopyDestinationName}")
 
 
         }
