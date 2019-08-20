@@ -35,6 +35,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 
 	@Override
 	void execute() throws MojoExecutionException, MojoFailureException {
+		getLog().info("execute rds-copydbsnapshot")
 		if (skip) {
 			return
 		}
