@@ -35,7 +35,6 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 
 	@Override
 	void execute() throws MojoExecutionException, MojoFailureException {
-		getLog().info("execute rds-copydbsnapshot")
 		if (skip) {
 			return
 		}
@@ -43,19 +42,25 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 		rdsClone = new RdsClone()
 		rdsClone.initialize(awsProfile)
 
-		getLog().info("Copy DB Snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} : ${snapshotCopyDestinationName}")
+		if (snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
+			copySnapshot();
+		} else {
+                        String err = "One of snapshotCopySourceName, snapshotCopyDestinationName or snapshotCopyDestinationRegion is missing";
+                        getLog().error(err)
+                        throw new MojoFailureException(err)
+		}
 	}
 
         protected void copySnapshot() throws MojoFailureException {
 
-                if (snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
-                        //rdsClient.setRegion(Region.getRegion(snapshotCopyDestinationRegion));
+		getLog().info("Copy DB Snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} : ${snapshotCopyDestinationName}")
+			rdsClient.setRegion(Region.getRegion(snapshotCopyDestinationRegion));
 
-                        //CopyDBSnapshotRequest copySnapshot = new CopyDBSnapshotRequest();
-                        //copySnapshot.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
-                        //copySnapshot.setTargetDBSnapshotIdentifier(snapshotCopyDestinationName);
+			CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
+			copySnapshotReq.setSourceDBSnapshotIdentifier(snapshotCopySourceName);
+			copySnapshotReq.setTargetDBSnapshotIdentifier(snapshotCopyDestinationName);
 
-                        //DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshot);
+                        //DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
                         getLog().info("Copying snapshot from ${snapshotCopySourceName} to ${snapshotCopyDestinationRegion} ${snapshotCopyDestinationName}")
 
                 } else {
