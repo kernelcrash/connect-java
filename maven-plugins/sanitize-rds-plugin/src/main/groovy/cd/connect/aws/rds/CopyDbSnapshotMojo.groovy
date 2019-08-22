@@ -40,6 +40,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 
 	protected RdsClone rdsClone;
         AmazonRDS rdsClient;
+	DBSnapshot dbSnapshot;
 
 
 	@Override
@@ -64,7 +65,17 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			rdsClone = new RdsClone()
 			rdsClone.initializeWithRegion(awsProfile,snapshotCopyDestinationRegion)
 
-			rdsClone.copySnapshot(snapshotCopySourceName, snapshotCopyDestinationName)
+			dbSnapshot = rdsClone.copySnapshot(snapshotCopySourceName, snapshotCopyDestinationName)
+			int waitCount = 10
+
+                	while (waitCount > 0) {
+				String s = dbSnapshot.getStatus()
+				getLog().info("Snapshot copy status = ${s}")
+
+	                        Thread.sleep(5000)
+				waitCount--;
+			}
+
 		} else {
                         String err = "One of snapshotCopySourceName, snapshotCopyDestinationName or snapshotCopyDestinationRegion is missing";
                         getLog().error(err)

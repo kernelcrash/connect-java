@@ -265,7 +265,7 @@ class RdsClone {
 		rdsClient.deleteDBInstance(del)
 	}
 
-        void copySnapshot(String sourceName, String destinationName) {
+        DBSnapshot copySnapshot(String sourceName, String destinationName) {
 
                 println "Copy DB Snapshot from ${sourceName} to ${destinationName}"
                 //rdsClient.setRegion(Region.getRegion(Regions.fromName(destinationRegion)));
@@ -276,6 +276,7 @@ class RdsClone {
 
                 DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
                 println "Copying snapshot from ${sourceName} to ${destinationName}"
+		return dbSnapshot;
 
         }
 
