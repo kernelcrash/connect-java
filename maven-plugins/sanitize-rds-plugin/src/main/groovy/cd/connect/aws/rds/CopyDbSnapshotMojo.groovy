@@ -66,7 +66,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			rdsClone.initializeWithRegion(awsProfile,snapshotCopyDestinationRegion)
 
 			dbSnapshot = rdsClone.copySnapshot(snapshotCopySourceName, snapshotCopyDestinationName)
-			int waitCount = 10
+			int waitCount = 100
 
                 	while (waitCount > 0) {
 				String s = dbSnapshot.getStatus()
