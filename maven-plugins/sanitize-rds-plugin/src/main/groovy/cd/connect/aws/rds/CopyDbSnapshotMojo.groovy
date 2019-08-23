@@ -6,6 +6,8 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.rds.AmazonRDS
 import com.amazonaws.services.rds.AmazonRDSClientBuilder
 import com.amazonaws.services.rds.model.*
+import com.amazonaws.AmazonWebServiceClient
+import com.amazonaws.services.identitymanagement.*
 
 import groovy.transform.CompileStatic
 import org.apache.maven.plugin.AbstractMojo
@@ -51,7 +53,6 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			return
 		}
 
-
 		if (databaseName) {
 			getLog().info("databaseName = ${databaseName} . This is used as a reference when checking the status of the snapshot copy")
 		}
@@ -69,7 +70,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			rdsClone = new RdsClone()
 			rdsClone.initializeWithRegion(awsProfile,snapshotCopyDestinationRegion)
 
-        		String result = rdsClone.copySnapshot(databaseName, snapshotCopySourceName, snapshotCopyDestinationName, 10, 10) 
+        		String result = rdsClone.copySnapshot(databaseName, snapshotCopySourceName, snapshotCopyDestinationName, 20, 10) 
 		}
 	}
 
