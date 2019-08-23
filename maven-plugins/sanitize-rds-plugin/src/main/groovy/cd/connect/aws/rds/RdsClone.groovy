@@ -280,4 +280,10 @@ class RdsClone {
 
         }
 
+	void listSnapshots(String databaseName) {
+		discoverSnapshots(databaseName, true).each { String name ->
+			println "> Snapshot ${name}"
+		}
+	}
+
 }
