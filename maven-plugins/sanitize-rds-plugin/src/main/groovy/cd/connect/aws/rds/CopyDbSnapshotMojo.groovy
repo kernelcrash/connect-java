@@ -71,7 +71,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
                 	while (waitCount > 0) {
 
 				rdsClone.listSnapshots("dr-master-event");
-				String status = snapshotStatus("dr-master-event-2019-08-18-17-52-copy", "dr-master-event")
+				String status = rdsClone.snapshotStatus("dr-master-event-2019-08-18-17-52-copy", "dr-master-event")
 				getLog().info("Snapshot copy status = ${status}")
 
 
