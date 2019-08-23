@@ -25,6 +25,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope
 	requiresDependencyResolution = ResolutionScope.NONE, threadSafe = true)
 @CompileStatic
 class CopyDbSnapshotMojo extends AbstractMojo {
+	@Parameter(property = "rds-dbsnapshot.databaseName")
+	String databaseName
 	@Parameter(property = "rds-dbsnapshot.snapshotCopySourceName")
 	String snapshotCopySourceName
 	@Parameter(property = "rds-dbsnapshot.snapshotCopyDestinationName")
@@ -50,6 +52,9 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 		}
 
 
+		if (databaseName) {
+			getLog().info("databaseName = ${databaseName} . This is used as a reference when checking the status of the snapshot copy")
+		}
 		if (snapshotCopySourceName) {
 			getLog().info("snapshotCopySourceName = ${snapshotCopySourceName}")
 		}
@@ -60,29 +65,11 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			getLog().info("snapshotCopyDestinationRegion = ${snapshotCopyDestinationRegion}")
 		}
 
-
-		if (snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
+		if (databaseName && snapshotCopySourceName && snapshotCopyDestinationName && snapshotCopyDestinationRegion) {
 			rdsClone = new RdsClone()
 			rdsClone.initializeWithRegion(awsProfile,snapshotCopyDestinationRegion)
 
-			dbSnapshot = rdsClone.copySnapshot(snapshotCopySourceName, snapshotCopyDestinationName)
-			int waitCount = 60
-
-                	while (waitCount > 0) {
-
-				rdsClone.listSnapshots("dr-master-event");
-				String status = rdsClone.snapshotStatus("dr-master-event-2019-08-18-17-52-copy", "dr-master-event")
-				getLog().info("Snapshot copy status = ${status}")
-
-
-	                        Thread.sleep(5000)
-				waitCount--;
-			}
-
-		} else {
-                        String err = "One of snapshotCopySourceName, snapshotCopyDestinationName or snapshotCopyDestinationRegion is missing";
-                        getLog().error(err)
-                        throw new MojoFailureException(err)
+        		String result = rdsClone.copySnapshot(databaseName, snapshotCopySourceName, snapshotCopyDestinationName, 10, 10) 
 		}
 	}
 

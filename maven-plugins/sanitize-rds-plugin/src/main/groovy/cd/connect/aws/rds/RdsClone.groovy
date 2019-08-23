@@ -265,7 +265,7 @@ class RdsClone {
 		rdsClient.deleteDBInstance(del)
 	}
 
-        DBSnapshot copySnapshot(String sourceName, String destinationName) {
+        DBSnapshot OLDcopySnapshot(String sourceName, String destinationName) {
 
                 println "Copy DB Snapshot from ${sourceName} to ${destinationName}"
                 //rdsClient.setRegion(Region.getRegion(Regions.fromName(destinationRegion)));
@@ -284,6 +284,32 @@ class RdsClone {
 		discoverSnapshots(databaseName, true).each { String name ->
 			println "> Snapshot ${name}"
 		}
+	}
+
+	// database is the original database name. Need this for referencing the snapshot copy
+	// sourceName is the ARN of the source snap
+	// destinationName is the destination snapshot name
+	String copySnapshot(String database, String sourceName, String destinationName, int waitPeriodInMinutes, int waitPeriodPollTimeInSeconds) {
+
+		long start = System.currentTimeMillis()
+
+                println "Copy DB Snapshot from ${sourceName} to ${destinationName}"
+                //rdsClient.setRegion(Region.getRegion(Regions.fromName(destinationRegion)));
+
+                CopyDBSnapshotRequest copySnapshotReq = new CopyDBSnapshotRequest();
+                copySnapshotReq.setSourceDBSnapshotIdentifier(sourceName);
+                copySnapshotReq.setTargetDBSnapshotIdentifier(destinationName);
+
+                DBSnapshot dbSnapshot = rdsClient.copyDBSnapshot(copySnapshotReq);
+                println "Copying snapshot from ${sourceName} to ${destinationName}"
+
+		long end = System.currentTimeMillis()
+
+		boolean success = waitFor(waitPeriodInMinutes, waitPeriodPollTimeInSeconds, { ->
+			return "available".equals(snapshotStatus(destinationName, database))
+		});
+
+		return success ? destinationName : null;
 	}
 
 }
