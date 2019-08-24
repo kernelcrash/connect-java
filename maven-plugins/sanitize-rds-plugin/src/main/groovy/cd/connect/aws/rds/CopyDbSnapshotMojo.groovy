@@ -52,7 +52,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 		}
 
 		if (databaseName) {
-			getLog().info("databaseName = ${databaseName} . This is used as a reference when checking the status of the snapshot copy")
+			getLog().info("databaseName = ${databaseName} . This is used as a reference when checking the status of the snapshot copy. It should be the name of the database that the snapshot was originally made from")
 		}
 		if (snapshotCopySourceName) {
 			getLog().info("snapshotCopySourceName = ${snapshotCopySourceName}")
