@@ -6,8 +6,6 @@ import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.services.rds.AmazonRDS
 import com.amazonaws.services.rds.AmazonRDSClientBuilder
 import com.amazonaws.services.rds.model.*
-import com.amazonaws.AmazonWebServiceClient
-import com.amazonaws.services.identitymanagement.*
 
 import groovy.transform.CompileStatic
 import org.apache.maven.plugin.AbstractMojo
