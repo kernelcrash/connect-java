@@ -70,7 +70,9 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			rdsClone = new RdsClone()
 			rdsClone.initializeWithRegion(awsProfile,snapshotCopyDestinationRegion)
 
-        		String result = rdsClone.copySnapshot(databaseName, snapshotCopySourceName, snapshotCopyDestinationName, 20, 10) 
+			rdsClone.deleteDatabaseSnapshot(snapshotCopyDestinationName, databaseName,20,10)
+
+        		//String result = rdsClone.copySnapshot(databaseName, snapshotCopySourceName, snapshotCopyDestinationName, 20, 10) 
 		}
 	}
 
