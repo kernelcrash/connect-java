@@ -27,6 +27,9 @@ abstract public class BaseSnapshotMojo extends AbstractMojo {
 	@Parameter(property = "rds-clone.snapshotName")
 	String snapshotName
 
+	@Parameter(property = "rds-clone.region")
+	String region
+
 	@Parameter(property = "rds-clone.aws-profile")
 	String awsProfile
 	@Parameter(property = 'rds-clone.db-subnet-group-name')
@@ -48,7 +51,12 @@ abstract public class BaseSnapshotMojo extends AbstractMojo {
 
 	protected void init() {
 		rdsClone = new RdsClone()
-		rdsClone.initialize(awsProfile)
+		if (region) {
+			rdsClone.initializeWithRegion(awsProfile,region)
+		} else {
+			rdsClone.initialize(awsProfile)
+		}
+
 	}
 	protected String snapshot() throws MojoFailureException {
 		if (snapshotName) {
