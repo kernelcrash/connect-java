@@ -68,7 +68,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 			rdsClone = new RdsClone()
 			rdsClone.initializeWithRegion(awsProfile,snapshotCopyDestinationRegion)
 
-			if (snapshotStatus(snapshotCopyDestinationName, databaseName)) {
+			if (rdsClone.snapshotStatus(snapshotCopyDestinationName, databaseName)) {
 				getLog().info("deleting old snapshot ${snapshotCopyDestinationName}")
 				rdsClone.deleteDatabaseSnapshot(snapshotCopyDestinationName, databaseName,20,10)
 			} else {
