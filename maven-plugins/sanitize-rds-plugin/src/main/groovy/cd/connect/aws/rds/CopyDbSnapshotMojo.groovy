@@ -70,7 +70,7 @@ class CopyDbSnapshotMojo extends AbstractMojo {
 
 			rdsClone.deleteDatabaseSnapshot(snapshotCopyDestinationName, databaseName,20,10)
 
-        		//String result = rdsClone.copySnapshot(databaseName, snapshotCopySourceName, snapshotCopyDestinationName, 20, 10) 
+        		String result = rdsClone.copySnapshot(databaseName, snapshotCopySourceName, snapshotCopyDestinationName, 20, 10) 
 		}
 	}
 
