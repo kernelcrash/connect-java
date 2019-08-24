@@ -36,7 +36,7 @@
 
 	<properties>
 		<maven.version>3.3.9</maven.version>
-		<aws.version>1.11.615</aws.version>
+		<aws.version>1.11.135</aws.version>
 	</properties>
 
 	<dependencies>
